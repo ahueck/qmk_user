@@ -3,5 +3,6 @@
     "build_targets": [
         ["bastardkb/dilemma/4x6_4", "vendor"],
         ["bastardkb/dilemma/4x6_4", "ahueck"],
+        ["redox", "ahueck"],
     ]
 }
