@@ -25,7 +25,7 @@ enum custom_keycodes {
     M_EUR
 };
 
-#ifdef AH_TAP_DANCE
+#ifdef TAP_DANCE_ENABLE
 // Tap dance keycodes
 enum tap_dance { TD_ESC_CAPS = 0 };
 
@@ -230,6 +230,7 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
     [LAYER_SYMB_EXT] = {ENCODER_CCW_CW(KC_PGUP, KC_PGDN), ENCODER_CCW_CW(KC_VOLD, KC_VOLU)},
     [LAYER_ADJUST]   = {ENCODER_CCW_CW(RGB_HUD, RGB_HUI), ENCODER_CCW_CW(RGB_SAD, RGB_SAI)},
     [LAYER_STD]      = {ENCODER_CCW_CW(KC_WH_U, KC_WH_D), ENCODER_CCW_CW(KC_VOLD, KC_VOLU)},
+    [LAYER_POINTER]  = {ENCODER_CCW_CW(RGB_HUD, RGB_HUI), ENCODER_CCW_CW(RGB_SAD, RGB_SAI)},
 };
 #endif
 
