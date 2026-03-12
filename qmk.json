@@ -3,6 +3,6 @@
     "build_targets": [
         ["bastardkb/dilemma/4x6_4_procyon", "vendor"],
         ["bastardkb/dilemma/4x6_4_procyon", "ahueck"],
-        ["redox", "ahueck"],
+        ["redox/rev1", "ahueck"],
     ]
 }
