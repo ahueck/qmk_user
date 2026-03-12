@@ -17,6 +17,17 @@ enum dilemma_keymap_layers {
 // Automatically enable sniping-mode on the pointer layer.
 // #define DILEMMA_AUTO_SNIPING_ON_LAYER LAYER_POINTER
 
+enum custom_keycodes {
+  ASC_SAR = SAFE_RANGE,
+  ASC_VERS,
+  M_AE,
+  M_OE,
+  M_UE,
+  M_ESZ,
+  M_MU,
+  M_EUR
+};
+
 #ifdef TAP_DANCE_ENABLE
 // Tap dance keycodes
 enum tap_dance { TD_ESC_CAPS = 0 };
@@ -196,6 +207,23 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 // clang-format on
 
+enum combos {
+  DF_ESC,
+  JK_TAB,
+  FJ_ENTER,
+  UI_LINE,
+};
+const uint16_t PROGMEM esc_combo[]   = {HOME_D, HOME_F, COMBO_END};
+const uint16_t PROGMEM tab_combo[]   = {HOME_J, HOME_K, COMBO_END};
+const uint16_t PROGMEM enter_combo[] = {HOME_F, HOME_J, COMBO_END};
+const uint16_t PROGMEM line_combo[]  = {KC_U, KC_I, COMBO_END};
+combo_t key_combos[]                 = {
+    [DF_ESC]   = COMBO(esc_combo, KC_ESC),
+    [JK_TAB]   = COMBO(tab_combo, KC_TAB),
+    [FJ_ENTER] = COMBO(enter_combo, KC_ENTER),
+    [UI_LINE]  = COMBO(line_combo, SELLINE),
+};
+
 #ifdef POINTING_DEVICE_ENABLE
 #    ifdef DILEMMA_AUTO_SNIPING_ON_LAYER
 layer_state_t layer_state_set_user(layer_state_t state) {
@@ -209,6 +237,8 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 // Forward-declare this helper function since it is defined in rgb_matrix.c.
 void rgb_matrix_update_pwm_buffers(void);
 #endif // RGB_MATRIX_ENABLE
+
+// clang-format off
 
 #ifdef ENCODER_MAP_ENABLE
 const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
