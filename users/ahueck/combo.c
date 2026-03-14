@@ -1,11 +1,5 @@
 #include "ahueck.h"
-
-enum combos {
-  DF_ESC,
-  JK_TAB,
-  FJ_ENTER,
-  UI_LINE,
-};
+#include "combo.h"
 
 const uint16_t PROGMEM esc_combo[]   = {HOME_D, HOME_F, COMBO_END};
 const uint16_t PROGMEM tab_combo[]   = {HOME_J, HOME_K, COMBO_END};
