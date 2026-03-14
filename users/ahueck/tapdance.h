@@ -2,9 +2,11 @@
 
 #include "quantum.h"
 
-enum tap_dance { TD_ESC_CAPS = 0 };
+enum tap_dance { TD_ESC_CAPS = 0, TAP_DANCE_MAX };
 
 #define TDKC_ESC TD(TD_ESC_CAPS)
+
+extern tap_dance_action_t tap_dance_actions[TAP_DANCE_MAX];
 
 #define AH_SINGLE_TD(_name_, key1, key2)                                       \
   void dance_finished_##_name_(qk_tap_dance_state_t* state, void* user_data) { \
