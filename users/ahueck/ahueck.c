@@ -1,4 +1,5 @@
 #include "ahueck.h"
+#include "version.h"
 
 // override for specific keyboard (extension point)
 __attribute__ ((weak))
