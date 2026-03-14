@@ -1,5 +1,10 @@
-#ifndef DILEMMA_AH_UTIL_MACRO_H_
-#define DILEMMA_AH_UTIL_MACRO_H_
+#pragma once
+
+#include "quantum.h"
+
+enum tap_dance { TD_ESC_CAPS = 0 };
+
+#define TDKC_ESC TD(TD_ESC_CAPS)
 
 #define AH_SINGLE_TD(_name_, key1, key2)                                       \
   void dance_finished_##_name_(qk_tap_dance_state_t* state, void* user_data) { \
@@ -14,19 +19,7 @@
     if (state->count == 1) {                                                   \
       unregister_code(key1);                                                   \
     } else {                                                                   \
-      unregister_code(key2);                                                   \
+      unregister_code(key2);                                                     \
       unregister_code(key1);                                                   \
     }                                                                          \
   }
-
-#define AH_SEND_KEY_OR_SHIFT_THEN(key, key_then)      \
-  if ((mods | get_oneshot_mods()) & MOD_MASK_SHIFT) { \
-    del_mods(MOD_MASK_SHIFT);                         \
-    del_oneshot_mods(MOD_MASK_SHIFT);                 \
-    SEND_STRING((key_then));                          \
-    set_mods(mods);                                   \
-  } else {                                            \
-    SEND_STRING((key));                               \
-  }
-
-#endif
