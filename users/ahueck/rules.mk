@@ -5,7 +5,8 @@ COMBO_ENABLE = yes
 SRC += ahueck.c
 
 ifeq ($(strip $(COMBO_ENABLE)), yes)
-    SRC += combo.c
+#    SRC += combo.c
+     INTROSPECTION_KEYMAP_C = combo.c
 endif
 
 ifeq ($(strip $(TAP_DANCE_ENABLE)), yes)
