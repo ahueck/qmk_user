@@ -2,7 +2,6 @@
 #include "version.h"
 #include "ahueck.h"
 #include "support.h"
-#include "combo.h"
 
 extern keymap_config_t keymap_config;
 

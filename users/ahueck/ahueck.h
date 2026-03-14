@@ -3,7 +3,11 @@
 #include "quantum.h"
 
 #ifdef TAP_DANCE_ENABLE
-#    include "tapdance.h"
+#    include "tap_dance.h"
+#endif
+
+#ifdef COMBO_ENABLE
+#    include "combo.h"
 #endif
 
 enum ahueck_layers {
