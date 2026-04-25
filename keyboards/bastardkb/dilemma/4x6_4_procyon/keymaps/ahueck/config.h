@@ -27,4 +27,3 @@
 
 // Both ctrl keys to enable command mode. (default MOD_MASK_SHIFT)
 #define IS_COMMAND() (get_mods() == MOD_MASK_CTRL)
-

@@ -1,5 +1,6 @@
 #include QMK_KEYBOARD_H
 #include "version.h"
+
 #include "ahueck.h"
 
 extern keymap_config_t keymap_config;
