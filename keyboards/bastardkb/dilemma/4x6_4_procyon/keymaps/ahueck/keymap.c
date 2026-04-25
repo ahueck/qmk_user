@@ -110,6 +110,19 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 #ifdef RGB_MATRIX_ENABLE
 // Forward-declare this helper function since it is defined in rgb_matrix.c.
 void rgb_matrix_update_pwm_buffers(void);
+
+void keyboard_post_init_user(void) {
+  rgb_matrix_mode_noeeprom(RGB_MATRIX_NONE);
+}
+
+bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+  if (get_highest_layer(layer_state) == 0) {
+    for (uint8_t i = led_min; i < led_max; ++i) {
+      rgb_matrix_set_color(i, 0, 0, 0);
+    }
+  }
+  return true; // allow vendor colors on layers > 0
+}
 #endif // RGB_MATRIX_ENABLE
 
 // clang-format off

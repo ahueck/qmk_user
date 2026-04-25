@@ -24,3 +24,7 @@
 #define ENCODER_RESOLUTION 4
 
 #define RGB_MATRIX_DEFAULT_MODE RGB_MATRIX_NONE
+
+// Both ctrl keys to enable command mode. (default MOD_MASK_SHIFT)
+#define IS_COMMAND() (get_mods() == MOD_MASK_CTRL)
+
