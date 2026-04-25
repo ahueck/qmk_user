@@ -1,81 +1,9 @@
 #include QMK_KEYBOARD_H
 #include "version.h"
-
-extern keymap_config_t keymap_config;
-
+#include "ahueck.h"
 #include "support.h"
 
-// Each layer gets a name for readability, which is then used in the keymap matrix below.
-// The underscores don't mean anything - you can have a layer called STUFF or any other name.
-// Layer names don't all need to be of the same length, obviously, and you can also skip them
-// entirely and just use numbers.
-#define _QWERTY 0
-#define _SYMB 1
-#define _SYMB_EXT 2
-#define _ADJUST 3
-#define _STD 4
-
-enum custom_keycodes {
-  QWERTY = SAFE_RANGE,
-  SYMB,
-  SYMB_EXT,
-  ADJUST,
-  STD,
-  ASC_SAR,
-  ASC_VERS,
-  M_AE,
-  M_OE,
-  M_UE,
-  M_ESZ,
-  M_MU,
-  M_EUR
-};
-
-#ifdef AH_TAP_DANCE
-// Tap dance keycodes
-enum tap_dance { TD_ESC_CAPS = 0 };
-
-// Tap Dance Definitions
-tap_dance_action_t tap_dance_actions[] = {
-    [TD_ESC_CAPS] = ACTION_TAP_DANCE_DOUBLE(KC_ESC, KC_CAPS),
-};
-#endif
-
-// Send custom strings
-// For Umlauts etc.: // setxkbmap -option compose:ralt
-bool process_record_user(uint16_t keycode, keyrecord_t* record) {
-  if (record->event.pressed) {
-    const uint8_t mods = get_mods();
-
-    switch (keycode) {
-      case ASC_SAR:
-        AH_SEND_KEY_OR_SHIFT_THEN("->", "=>")
-        return false;
-      case ASC_VERS:
-        SEND_STRING(QMK_BUILDDATE ":" QMK_VERSION);
-        return false;
-      case M_AE:
-        SEND_STRING(SS_RALT(SS_LSFT("'")) "a");
-        return false;
-      case M_OE:
-        SEND_STRING(SS_RALT(SS_RSFT("'")) "o");
-        return false;
-      case M_UE:
-        SEND_STRING(SS_RALT(SS_RSFT("'")) "u");
-        return false;
-      case M_ESZ:
-        SEND_STRING(SS_RALT("ss"));
-        return false;
-      case M_MU:
-        SEND_STRING(SS_RALT("/u"));
-        return false;
-      case M_EUR:
-        SEND_STRING(SS_RALT("c="));
-        return false;
-    }
-  }
-  return true;
-};
+extern keymap_config_t keymap_config;
 
 #ifdef RGBLIGHT_ENABLE
 void keyboard_post_init_user(void) {
@@ -85,13 +13,13 @@ void keyboard_post_init_user(void) {
 // Change LED colors depending on the layer.
 layer_state_t layer_state_set_user(layer_state_t state) {
   switch (get_highest_layer(state)) {
-    case _SYMB:
+    case LAYER_SYMB:
       AH_STATIC_LIGHT(HSV_GREEN);
       break;
-    case _SYMB_EXT:
+    case LAYER_SYMB_EXT:
       AH_STATIC_LIGHT(HSV_BLUE);
       break;
-    case _ADJUST:
+    case LAYER_ADJUST:
       AH_STATIC_LIGHT(HSV_RED);
       break;
     default:
@@ -102,64 +30,10 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 };
 #endif
 
-// Shortcut to make keymap more readable
-#define KC_BKSL KC_BSLASH
-#define SYM_L MO(_SYMB)
-
-#define KC_SYSP LT(_SYMB, KC_SPC)   // symbol layer or space
-#define KC_SYBS LT(_SYMB, KC_BSPC)  // symbol layer or backspace
-
-#define KC_SYEEN LT(_SYMB_EXT, KC_ENT)  // ext. symbol layer or enter
-#define KC_SYEDE LT(_SYMB_EXT, KC_DEL)  // ext. symbol layer or delete
-
-#define KC_RSBS RSFT_T(KC_BSLS)
-
-#define KC_ADEN LT(_ADJUST, KC_END)
-#define KC_ADPU LT(_ADJUST, KC_PGUP)
-
-#define TDKC_ESC TD(TD_ESC_CAPS)
-
-#define KC_CTSP LCTL(KC_SPC)
-#define KC_CTQU RCTL_T(KC_QUOT)
-
-#define KC_VOLM KC_AUDIO_MUTE
-#define KC_CALC KC_CALCULATOR
-
-#define KC_CTME MT(MOD_LCTL | MOD_LGUI, KC_TILD)
-#define KC_CTSH MT(MOD_LCTL | MOD_LSFT, KC_PMNS)
-#define KC_CTAL MT(MOD_LCTL | MOD_LALT, KC_PPLS)
-
-#define OC_CTSH OSM(MOD_LCTL | MOD_LSFT)
-#define OC_CTAL OSM(MOD_LCTL | MOD_LALT)
-
-#define KC_UNDO LCTL(KC_Z)
-#define KC_REDO LCTL(KC_Y)
-#define KC_CPY LCTL(KC_C)
-#define KC_PST LCTL(KC_V)
-#define KC_CUT LCTL(KC_X)
-
-#define TO_BASE TO(_QWERTY)
-#define TO_STD TO(_STD)
-
-// Left-hand home row mods
-#define HOME_A LGUI_T(KC_A)
-#define HOME_S LALT_T(KC_S)
-#define HOME_D LSFT_T(KC_D)
-#define HOME_F LCTL_T(KC_F)
-
-// Right-hand home row mods
-#define HOME_J RCTL_T(KC_J)
-#define HOME_K RSFT_T(KC_K)
-#define HOME_L LALT_T(KC_L)
-#define HOME_SCLN RGUI_T(KC_SCLN)
-
-#define KC_HS LT(_SYMB, KC_H)  // symbol layer or space
-#define KC_GS LT(_SYMB, KC_G)  // symbol layer or backspace
-
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
-  [_QWERTY] = LAYOUT(
+  [LAYER_QWERTY] = LAYOUT(
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                                           ┌────────┬────────┬────────┬────────┬────────┬────────┐
      KC_GRV  ,KC_1    ,KC_2    ,KC_3    ,KC_4    ,KC_5    ,                                            KC_6    ,KC_7    ,KC_8    ,KC_9    ,KC_0    ,KC_CAPS ,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐                         ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
@@ -173,7 +47,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //└────────┴────────┴────────┴────────┘    └────────┘   └────────┴────────┘       └────────┴────────┘   └────────┘    └────────┴────────┴────────┴────────┘
   ),
 
-  [_SYMB] = LAYOUT(
+  [LAYER_SYMB] = LAYOUT(
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                                           ┌────────┬────────┬────────┬────────┬────────┬────────┐
      _______ ,KC_F1   ,KC_F2   ,KC_F3   ,KC_F4   ,KC_F5   ,                                            KC_F6   ,KC_F7   ,KC_F8   ,KC_F9   ,KC_F10  ,KC_F11 ,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐                         ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
@@ -187,7 +61,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //└────────┴────────┴────────┴────────┘    └────────┘   └────────┴────────┘       └────────┴────────┘   └────────┘    └────────┴────────┴────────┴────────┘
   ),
 
-  [_SYMB_EXT] = LAYOUT(
+  [LAYER_SYMB_EXT] = LAYOUT(
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                                           ┌────────┬────────┬────────┬────────┬────────┬────────┐
      _______ ,XXXXXXX ,XXXXXXX ,XXXXXXX ,XXXXXXX ,XXXXXXX ,                                            XXXXXXX ,KC_CLEAR,KC_BSPC ,XXXXXXX ,M_EUR   ,XXXXXXX ,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐                         ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
@@ -201,7 +75,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //└────────┴────────┴────────┴────────┘    └────────┘   └────────┴────────┘       └────────┴────────┘   └────────┘    └────────┴────────┴────────┴────────┘
   ),
 
-  [_ADJUST] = LAYOUT(
+  [LAYER_ADJUST] = LAYOUT(
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                                           ┌────────┬────────┬────────┬────────┬────────┬────────┐
      XXXXXXX ,KC_F1   ,KC_F2   ,KC_F3   ,KC_F4   ,KC_F5   ,                                            KC_F6   ,KC_F7   ,KC_F8   ,KC_F9   ,KC_F10  ,KC_F11  ,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐                         ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
@@ -215,7 +89,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //└────────┴────────┴────────┴────────┘    └────────┘   └────────┴────────┘       └────────┴────────┘   └────────┘    └────────┴────────┴────────┴────────┘
   ),
 
-  [_STD] = LAYOUT(
+  [LAYER_STD] = LAYOUT(
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                                           ┌────────┬────────┬────────┬────────┬────────┬────────┐
      _______ ,_______ ,_______ ,_______ ,_______ ,_______ ,                                            KC_F1   ,KC_F2   ,KC_F3   ,KC_F4   ,KC_F5   ,KC_F6   ,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐                         ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
@@ -241,20 +115,3 @@ const char PROGMEM chordal_hold_layout[MATRIX_ROWS][MATRIX_COLS] =
         'L', 'L', 'L', 'L',      'L', 'L', 'L',      'R', 'R', 'R',      'R', 'R', 'R', 'R'
     );
 // clang-format on
-
-enum combos {
-  DF_ESC,
-  JK_TAB,
-  FJ_ENTER,
-  UI_LINE,
-};
-const uint16_t PROGMEM esc_combo[]   = {HOME_D, HOME_F, COMBO_END};
-const uint16_t PROGMEM tab_combo[]   = {HOME_J, HOME_K, COMBO_END};
-const uint16_t PROGMEM enter_combo[] = {HOME_F, HOME_J, COMBO_END};
-const uint16_t PROGMEM line_combo[]  = {KC_U, KC_I, COMBO_END};
-combo_t key_combos[]                 = {
-    [DF_ESC]   = COMBO(esc_combo, KC_ESC),
-    [JK_TAB]   = COMBO(tab_combo, KC_TAB),
-    [FJ_ENTER] = COMBO(enter_combo, KC_ENTER),
-    [UI_LINE]  = COMBO(line_combo, SELLINE),
-};
