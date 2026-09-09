@@ -3,6 +3,10 @@
 
 #include "ahueck.h"
 
+#ifdef COMMUNITY_MODULE_BK_POINTING_DEVICE_ENABLE
+#    include "bk_pointing_device.h"
+#endif
+
 extern keymap_config_t keymap_config;
 
 #ifndef POINTING_DEVICE_ENABLE
@@ -101,16 +105,42 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 void rgb_matrix_update_pwm_buffers(void);
 
 void keyboard_post_init_user(void) {
-  rgb_matrix_mode_noeeprom(RGB_MATRIX_NONE);
+#ifdef COMMUNITY_MODULE_BK_POINTING_DEVICE_ENABLE
+  // Auto-switch to LAYER_POINTER when using the touchpad.
+  bkpd_set_auto_mouse_layer_enabled(true);
+#endif
+  rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
 }
 
+// Change LED colors depending on the layer.
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
-  if (get_highest_layer(layer_state) == 0) {
-    for (uint8_t i = led_min; i < led_max; ++i) {
-      rgb_matrix_set_color(i, 0, 0, 0);
-    }
+#ifdef COMMUNITY_MODULE_BK_POINTING_DEVICE_ENABLE
+  // Leave the DPI indicator to the pointing device module while it is active.
+  if (bkpd_is_changing_dpi_settings()) {
+    return true;
   }
-  return true; // allow vendor colors on layers > 0
+#endif
+  RGB rgb = (RGB){RGB_OFF};
+  switch (get_highest_layer(layer_state)) {
+    case LAYER_SYMB:
+      rgb = (RGB){RGB_GREEN};
+      break;
+    case LAYER_SYMB_EXT:
+      rgb = (RGB){RGB_BLUE};
+      break;
+    case LAYER_ADJUST:
+      rgb = (RGB){RGB_RED};
+      break;
+    case LAYER_POINTER:
+      rgb = (RGB){RGB_GOLD};
+      break;
+    default:
+      break;
+  }
+  for (uint8_t i = led_min; i < led_max; ++i) {
+    rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
+  }
+  return true;
 }
 #endif // RGB_MATRIX_ENABLE
 
