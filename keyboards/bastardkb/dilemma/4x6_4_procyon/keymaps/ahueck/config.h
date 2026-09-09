@@ -38,6 +38,9 @@
 #endif
 #define RGBLIGHT_LED_COUNT 104
 
+// bk_pointing_device references this Argos value in its standalone build path.
+#define pointing_device_type_unknown 0
+
 #define RGB_MATRIX_DEFAULT_MODE RGB_MATRIX_NONE
 
 // Both ctrl keys to enable command mode. (default MOD_MASK_SHIFT)
