@@ -1,3 +1,6 @@
 {
-  "modules": ["getreuer/select_word"]
+  "modules": [
+    "bastardkb/bk_pointing_device",
+    "getreuer/select_word"
+  ]
 }
